@@ -102,94 +102,96 @@ class _HomeScreenState extends State<HomeScreen> {
             EdgeInsets.symmetric(horizontal: 16.0 / mockupWidth * deviceWidth),
         child: Stack(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 36.67 / mockupWidth * deviceWidth,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 87 / mockupWidth * deviceWidth),
-                  child: SizedBox(
-                    width: 169 / mockupWidth * deviceWidth,
-                    height: 44 / mockupWidth * deviceWidth,
-                    child: SvgPicture.asset('assets/images/Aputure_Logo.svg'),
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 36.67 / mockupWidth * deviceWidth,
                   ),
-                ),
-                SizedBox(
-                  height: 28 / mockupWidth * deviceWidth,
-                ),
-                //TextField
-                SizedBox(
-                  height: 56 / mockupWidth * deviceWidth,
-                  width: 343 / mockupWidth * deviceWidth,
-                  child: TextField(
-                    onChanged: filterSearch,
-                    controller: toSearch,
-                    style: const TextStyle(color: Colors.black),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: const Color(0xFFF6F7FA),
-                      hintText: 'Search',
-                      hintStyle: const TextStyle(
-                        color: Color(0xFF9D9FA0),
-                        fontSize: 16,
-                      ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Color(0xFFF6F7FA), width: 0.0),
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                      ),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Color(0xFFF6F7FA), width: 0.0),
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                      ),
-                      suffixIcon: Padding(
-                        padding: EdgeInsets.only(
-                            right: 6.0 / mockupWidth * deviceWidth,
-                            top: 6.0 / mockupWidth * deviceWidth,
-                            bottom: 6.0 / mockupWidth * deviceWidth),
-                        child: SizedBox(
-                          height: 44 / mockupWidth * deviceWidth,
-                          width: 44 / mockupWidth * deviceWidth,
-                          child: SvgPicture.string(
-                            '''<svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect width="44" height="44" rx="12" fill="#EC5F5F"/>
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M24.3764 22.4769C26.0463 20.1337 25.8301 16.8596 23.7279 14.7574C21.3848 12.4142 17.5858 12.4142 15.2426 14.7574C12.8995 17.1005 12.8995 20.8995 15.2426 23.2426C17.3449 25.3449 20.6189 25.561 22.9621 23.8911L28.6777 29.6066L30.0919 28.1924L24.3764 22.4769ZM22.3137 16.1716C23.8758 17.7337 23.8758 20.2663 22.3137 21.8284C20.7516 23.3905 18.2189 23.3905 16.6568 21.8284C15.0948 20.2663 15.0948 17.7337 16.6568 16.1716C18.2189 14.6095 20.7516 14.6095 22.3137 16.1716Z" fill="white"/>
-                  </svg>
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 87 / mockupWidth * deviceWidth),
+                    child: SizedBox(
+                      width: 169 / mockupWidth * deviceWidth,
+                      height: 44 / mockupWidth * deviceWidth,
+                      child: SvgPicture.asset('assets/images/Aputure_Logo.svg'),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 28 / mockupWidth * deviceWidth,
+                  ),
+                  //TextField
+                  SizedBox(
+                    height: 56 / mockupWidth * deviceWidth,
+                    width: 343 / mockupWidth * deviceWidth,
+                    child: TextField(
+                      onChanged: filterSearch,
+                      controller: toSearch,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: const Color(0xFFF6F7FA),
+                        hintText: 'Search',
+                        hintStyle: const TextStyle(
+                          color: Color(0xFF9D9FA0),
+                          fontSize: 16,
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Color(0xFFF6F7FA), width: 0.0),
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Color(0xFFF6F7FA), width: 0.0),
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                        ),
+                        suffixIcon: Padding(
+                          padding: EdgeInsets.only(
+                              right: 6.0 / mockupWidth * deviceWidth,
+                              top: 6.0 / mockupWidth * deviceWidth,
+                              bottom: 6.0 / mockupWidth * deviceWidth),
+                          child: SizedBox(
+                            height: 44 / mockupWidth * deviceWidth,
+                            width: 44 / mockupWidth * deviceWidth,
+                            child: SvgPicture.string(
+                              '''<svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="44" height="44" rx="12" fill="#EC5F5F"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M24.3764 22.4769C26.0463 20.1337 25.8301 16.8596 23.7279 14.7574C21.3848 12.4142 17.5858 12.4142 15.2426 14.7574C12.8995 17.1005 12.8995 20.8995 15.2426 23.2426C17.3449 25.3449 20.6189 25.561 22.9621 23.8911L28.6777 29.6066L30.0919 28.1924L24.3764 22.4769ZM22.3137 16.1716C23.8758 17.7337 23.8758 20.2663 22.3137 21.8284C20.7516 23.3905 18.2189 23.3905 16.6568 21.8284C15.0948 20.2663 15.0948 17.7337 16.6568 16.1716C18.2189 14.6095 20.7516 14.6095 22.3137 16.1716Z" fill="white"/>
+                    </svg>
 
 ''',
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 18 / mockupWidth * deviceWidth,
-                ),
-                Text(
-                  "All Tasks",
-                  textScaleFactor: textScaleFactor,
-                  style: const TextStyle(
-                      color: Color(0xFF333333),
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600),
-                ),
-                SizedBox(
-                  height: 16 / mockupWidth * deviceWidth,
-                ),
+                  SizedBox(
+                    height: 18 / mockupWidth * deviceWidth,
+                  ),
+                  Text(
+                    "All Tasks",
+                    textScaleFactor: textScaleFactor,
+                    style: const TextStyle(
+                        color: Color(0xFF333333),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(
+                    height: 16 / mockupWidth * deviceWidth,
+                  ),
 
-                //List
-                Expanded(
-                  child: Visibility(
+                  //List
+                  Visibility(
                     visible: isLoaded == true,
                     replacement: const Center(
                       child: CircularProgressIndicator(),
                     ),
                     child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: items.length,
                         itemBuilder: (context, index) {
                           var jsonString = jsonEncode(items[index]);
@@ -285,8 +287,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         }),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Padding(
               padding:
@@ -354,8 +356,9 @@ class _HomeScreenState extends State<HomeScreen> {
             }
 
             return Padding(
+              //119.33
               padding: EdgeInsets.symmetric(
-                  vertical: 119.33 / mockupWidth * deviceWidth),
+                  vertical: 16 / mockupWidth * deviceWidth),
               child: AlertDialog(
                 scrollable: true,
                 insetPadding: EdgeInsets.zero,
