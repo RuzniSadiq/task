@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -24,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController dateController = TextEditingController();
   RemoteServices rs = RemoteServices();
   List items = [];
+  List textItems = ["Name", "Description", "Due Date"];
 
   @override
   void initState() {
@@ -76,14 +76,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   selectedTaskDate(BuildContext context) async {
-    var _pickedDate = await showDatePicker(
+    var pickedDate = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(2000),
         lastDate: DateTime(2025));
-    if (_pickedDate != null) {
+    if (pickedDate != null) {
       setState(() {
-        dateController.text = DateFormat('yyyy-MM-dd').format(_pickedDate);
+        dateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
       });
     }
   }
@@ -111,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: 87 / mockupWidth * deviceWidth),
-                  child: Container(
+                  child: SizedBox(
                     width: 169 / mockupWidth * deviceWidth,
                     height: 44 / mockupWidth * deviceWidth,
                     child: SvgPicture.asset('assets/images/Aputure_Logo.svg'),
@@ -130,18 +130,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: const TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: Color(0xFFF6F7FA),
+                      fillColor: const Color(0xFFF6F7FA),
                       hintText: 'Search',
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         color: Color(0xFF9D9FA0),
                         fontSize: 16,
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide:
                             BorderSide(color: Color(0xFFF6F7FA), width: 0.0),
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide:
                             BorderSide(color: Color(0xFFF6F7FA), width: 0.0),
                         borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -151,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             right: 6.0 / mockupWidth * deviceWidth,
                             top: 6.0 / mockupWidth * deviceWidth,
                             bottom: 6.0 / mockupWidth * deviceWidth),
-                        child: Container(
+                        child: SizedBox(
                           height: 44 / mockupWidth * deviceWidth,
                           width: 44 / mockupWidth * deviceWidth,
                           child: SvgPicture.string(
@@ -173,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   "All Tasks",
                   textScaleFactor: textScaleFactor,
-                  style: TextStyle(
+                  style: const TextStyle(
                       color: Color(0xFF333333),
                       fontSize: 18,
                       fontWeight: FontWeight.w600),
@@ -186,6 +186,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: Visibility(
                     visible: isLoaded == true,
+                    replacement: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
                     child: ListView.builder(
                         itemCount: items.length,
                         itemBuilder: (context, index) {
@@ -211,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             0.0 / mockupWidth * deviceWidth,
                                             4 / mockupWidth * deviceWidth))
                                   ],
-                                  color: Color(0xFFF6F7FA),
+                                  color: const Color(0xFFF6F7FA),
                                   borderRadius: BorderRadius.circular(15)),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -227,24 +230,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "${task["name"].toString()}",
+                                          task["name"].toString(),
                                           textScaleFactor: textScaleFactor,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               color: Color(0xFF303030),
                                               fontWeight: FontWeight.w600,
                                               fontSize: 16),
                                         ),
-                                        Container(
-                                          height:
-                                              16 / mockupWidth * deviceWidth,
-                                          width:
-                                              3.96 / mockupWidth * deviceWidth,
-                                          child: SvgPicture.string(
-                                            '''<svg width="5" height="16" viewBox="0 0 5 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M2.8674 4C3.95524 4 4.8453 3.1 4.8453 2C4.8453 0.9 3.95524 0 2.8674 0C1.77955 0 0.889496 0.9 0.889496 2C0.889496 3.1 1.77955 4 2.8674 4ZM2.8674 6C1.77955 6 0.889496 6.9 0.889496 8C0.889496 9.1 1.77955 10 2.8674 10C3.95524 10 4.8453 9.1 4.8453 8C4.8453 6.9 3.95524 6 2.8674 6ZM2.8674 12C1.77955 12 0.889496 12.9 0.889496 14C0.889496 15.1 1.77955 16 2.8674 16C3.95524 16 4.8453 15.1 4.8453 14C4.8453 12.9 3.95524 12 2.8674 12Z" fill="#BDC1C4"/>
-                            </svg>
-
-''',
+                                        InkWell(
+                                          onTap: () {
+                                            editOrDelete(textScaleFactor,
+                                                deviceWidth, task, index);
+                                          },
+                                          child: Icon(
+                                            Icons.more_vert,
+                                            size:
+                                                18 / mockupWidth * deviceWidth,
+                                            color: const Color(0xFFBDC1C4),
                                           ),
                                         ),
                                       ],
@@ -253,9 +255,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       height: 10 / mockupWidth * deviceWidth,
                                     ),
                                     Text(
-                                      "${task["description"].toString()}",
+                                      task["description"].toString(),
                                       textScaleFactor: textScaleFactor,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Color(0xFF8C8C8C),
                                           fontWeight: FontWeight.w400,
                                           fontSize: 14),
@@ -264,10 +266,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                       alignment: Alignment.bottomRight,
                                       child: Text(
                                         task["date"] != null
-                                            ? "${DateFormat.yMMMMd().format(DateTime.parse(task["date"])).toString()}"
+                                            ? DateFormat.yMMMMd()
+                                                .format(DateTime.parse(
+                                                    task["date"]))
+                                                .toString()
                                             : "",
                                         textScaleFactor: textScaleFactor,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: Color(0xFFC7C9D9),
                                             fontWeight: FontWeight.w400,
                                             fontSize: 14),
@@ -279,9 +284,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                         }),
-                    replacement: Center(
-                      child: CircularProgressIndicator(),
-                    ),
                   ),
                 ),
               ],
@@ -297,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all(Color(0xFFEC5F5F)),
+                          MaterialStateProperty.all(const Color(0xFFEC5F5F)),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
@@ -305,19 +307,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     onPressed: () {
-                      taskAdd(textScaleFactor, deviceWidth);
+                      taskAddorEdit(
+                          textScaleFactor, deviceWidth, "Add", "", "", "", "");
                     },
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.add,
                             color: Color(0xFFFFFFFF),
                           ),
                           Text(
                             "Add Task",
                             textScaleFactor: textScaleFactor,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Color(0xFFFFFFFF),
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16),
@@ -333,219 +336,200 @@ class _HomeScreenState extends State<HomeScreen> {
     ));
   }
 
-  Future taskAdd(double textScaleFactor, double deviceWidth) => showDialog(
-      context: context,
-      builder: (context) => Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: 119.33 / mockupWidth * deviceWidth),
-            child: AlertDialog(
-              scrollable: true,
-              insetPadding: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(24.0))),
-              title: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 18.0 / mockupWidth * deviceWidth),
-                child: Text(
-                  "Add Task",
-                  textScaleFactor: textScaleFactor,
-                  style: TextStyle(
-                      color: Color(0xFF333333),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16),
-                ),
-              ),
-              content: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Padding(
+  Future taskAddorEdit(
+          double textScaleFactor,
+          double deviceWidth,
+          String operation,
+          String id,
+          String name,
+          String description,
+          String date) =>
+      showDialog(
+          context: context,
+          builder: (context) {
+            if (operation == "Edit") {
+              nameController.text = name;
+              descriptionController.text = description;
+              dateController.text = date;
+            }
+
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                  vertical: 119.33 / mockupWidth * deviceWidth),
+              child: AlertDialog(
+                scrollable: true,
+                insetPadding: EdgeInsets.zero,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(24.0))),
+                title: Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: 16.0 / mockupWidth * deviceWidth),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                      horizontal: 18.0 / mockupWidth * deviceWidth),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Name",
+                        operation == "Edit" ? "Edit Task" : "Add Task",
                         textScaleFactor: textScaleFactor,
-                        style: TextStyle(
-                            color: Color(0xFF303030),
-                            fontWeight: FontWeight.w500,
+                        style: const TextStyle(
+                            color: Color(0xFF333333),
+                            fontWeight: FontWeight.w600,
                             fontSize: 16),
                       ),
-                      SizedBox(
-                        height: 4 / mockupWidth * deviceWidth,
-                      ),
-                      SizedBox(
-                        height: 56 / mockupWidth * deviceWidth,
-                        width: 343 / mockupWidth * deviceWidth,
-                        child: TextField(
-                          controller: nameController,
-                          style: const TextStyle(color: Colors.black),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Color(0xFFF6F7FA),
-                            hintText: 'Name',
-                            hintStyle: TextStyle(
-                              color: Color(0xFF9D9FA0),
-                              fontSize: 16,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Color(0xFFF6F7FA), width: 0.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Color(0xFFF6F7FA), width: 0.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                            ),
-                          ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(
+                          Icons.close,
+                          color: Color(0xFF8C8C8C),
                         ),
-                      ),
-
-                      SizedBox(
-                        height: 16 / mockupWidth * deviceWidth,
-                      ),
-
-                      Text(
-                        "Description",
-                        textScaleFactor: textScaleFactor,
-                        style: TextStyle(
-                            color: Color(0xFF303030),
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16),
-                      ),
-                      SizedBox(
-                        height: 4 / mockupWidth * deviceWidth,
-                      ),
-                      SizedBox(
-                        height: 56 / mockupWidth * deviceWidth,
-                        width: 343 / mockupWidth * deviceWidth,
-                        child: TextField(
-                          controller: descriptionController,
-                          style: const TextStyle(color: Colors.black),
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Color(0xFFF6F7FA),
-                            hintText: 'Description',
-                            hintStyle: TextStyle(
-                              color: Color(0xFF9D9FA0),
-                              fontSize: 16,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Color(0xFFF6F7FA), width: 0.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Color(0xFFF6F7FA), width: 0.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                            ),
+                      )
+                    ],
+                  ),
+                ),
+                content: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 16.0 / mockupWidth * deviceWidth),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (var textItem in textItems) ...[
+                          Text(
+                            "$textItem",
+                            textScaleFactor: textScaleFactor,
+                            style: const TextStyle(
+                                color: Color(0xFF303030),
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16),
                           ),
-                        ),
-                      ),
-
-                      SizedBox(
-                        height: 16 / mockupWidth * deviceWidth,
-                      ),
-                      Text(
-                        "Due Date",
-                        textScaleFactor: textScaleFactor,
-                        style: TextStyle(
-                            color: Color(0xFF303030),
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16),
-                      ),
-                      SizedBox(
-                        height: 4 / mockupWidth * deviceWidth,
-                      ),
-                      SizedBox(
-                        height: 56 / mockupWidth * deviceWidth,
-                        width: 343 / mockupWidth * deviceWidth,
-                        child: TextField(
-                          controller: dateController,
-                          style: const TextStyle(color: Colors.black),
-                          decoration: InputDecoration(
-                            suffixIcon: InkWell(
-                              onTap: () {
-                                selectedTaskDate(context);
-                              },
-                              child: Icon(
-                                Icons.calendar_today,
-                                color: Color(0xFFEC5F5F),
-                              ),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFF6F7FA),
-                            hintText:
-                                '${DateFormat.yMMMMd().format(DateTime.now()).toString()}',
-                            hintStyle: TextStyle(
-                              color: Color(0xFF9D9FA0),
-                              fontSize: 16,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Color(0xFFF6F7FA), width: 0.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Color(0xFFF6F7FA), width: 0.0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                            ),
+                          SizedBox(
+                            height: 4 / mockupWidth * deviceWidth,
                           ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 32 / mockupWidth * deviceWidth,
-                      ),
-                      //save button
-                      SizedBox(
-                        width: 343 / mockupWidth * deviceWidth,
-                        height: 56 / mockupWidth * deviceWidth,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Color(0xFFEC5F5F)),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
+                          SizedBox(
+                            height: 56 / mockupWidth * deviceWidth,
+                            width: 343 / mockupWidth * deviceWidth,
+                            child: TextField(
+                              controller: textItem == "Name"
+                                  ? nameController
+                                  : textItem == "Description"
+                                      ? descriptionController
+                                      : dateController,
+                              style: const TextStyle(color: Colors.black),
+                              decoration: InputDecoration(
+                                suffixIcon: textItem == "Due Date"
+                                    ? InkWell(
+                                        onTap: () {
+                                          selectedTaskDate(context);
+                                        },
+                                        child: const Icon(
+                                          Icons.calendar_today,
+                                          color: Color(0xFFEC5F5F),
+                                        ),
+                                      )
+                                    : null,
+                                filled: true,
+                                fillColor: const Color(0xFFF6F7FA),
+                                hintText: textItem == "Due Date"
+                                    ? DateFormat.yMMMMd()
+                                        .format(DateTime.now())
+                                        .toString()
+                                    : '$textItem',
+                                hintStyle: const TextStyle(
+                                  color: Color(0xFF9D9FA0),
+                                  fontSize: 16,
+                                ),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xFFF6F7FA), width: 0.0),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                ),
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xFFF6F7FA), width: 0.0),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15)),
+                                ),
                               ),
                             ),
                           ),
-                          onPressed: () async {
-                            RemoteServices rs = RemoteServices();
+                          SizedBox(
+                            height: 16 / mockupWidth * deviceWidth,
+                          ),
+                        ],
 
-                            if (DateTime.tryParse(
-                                    dateController.text.toString()) !=
-                                null) {
-                              bool response = await rs.createTask(
-                                  nameController.text.toString(),
-                                  descriptionController.text.toString(),
-                                  dateController.text.toString());
-                              if (response) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: Row(
-                                    children: const [
-                                      Icon(
-                                        Icons.playlist_add_check,
-                                        color: Colors.greenAccent,
-                                      ),
-                                      SizedBox(width: 20),
-                                      Expanded(
-                                          child:
-                                              Text('Task Added Successfully!')),
-                                    ],
-                                  ),
-                                ));
+                        SizedBox(
+                          height: 32 / mockupWidth * deviceWidth,
+                        ),
+
+                        //save/update button
+                        SizedBox(
+                          width: 343 / mockupWidth * deviceWidth,
+                          height: 56 / mockupWidth * deviceWidth,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  const Color(0xFFEC5F5F)),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              bool response = false;
+
+                              if (DateTime.tryParse(
+                                      dateController.text.toString()) !=
+                                  null) {
+                                if (operation == "Add") {
+                                  response = await rs.createTask(
+                                      nameController.text.toString(),
+                                      descriptionController.text.toString(),
+                                      dateController.text.toString());
+                                } else if (operation == "Edit") {
+                                  response = await rs.updateTask(
+                                      id,
+                                      nameController.text.toString(),
+                                      descriptionController.text.toString(),
+                                      dateController.text.toString());
+                                }
+
+                                if (response) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.playlist_add_check,
+                                          color: Colors.greenAccent,
+                                        ),
+                                        const SizedBox(width: 20),
+                                        Expanded(
+                                            child: Text(operation == "Edit"
+                                                ? 'Task Updated Successfully!'
+                                                : 'Task Added Successfully!')),
+                                      ],
+                                    ),
+                                  ));
+                                } else {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Row(
+                                      children: const [
+                                        Icon(
+                                          Icons.error,
+                                          color: Colors.red,
+                                        ),
+                                        SizedBox(width: 20),
+                                        Expanded(child: Text('Error')),
+                                      ],
+                                    ),
+                                  ));
+                                }
                               } else {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
@@ -556,49 +540,152 @@ class _HomeScreenState extends State<HomeScreen> {
                                         color: Colors.red,
                                       ),
                                       SizedBox(width: 20),
-                                      Expanded(child: Text('Error')),
+                                      Expanded(
+                                          child: Text('Enter a valid date')),
                                     ],
                                   ),
                                 ));
                               }
-                            } else {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Row(
-                                  children: const [
-                                    Icon(
-                                      Icons.error,
-                                      color: Colors.red,
-                                    ),
-                                    SizedBox(width: 20),
-                                    Expanded(child: Text('Enter a valid date')),
-                                  ],
-                                ),
-                              ));
-                            }
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomeScreen(),
-                                    maintainState: true),
-                                (Route<dynamic> route) => false);
-                          },
-                          child: Center(
-                            child: Text(
-                              "Save",
-                              textScaleFactor: textScaleFactor,
-                              style: TextStyle(
-                                  color: Color(0xFFFFFFFF),
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16),
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const HomeScreen(),
+                                      maintainState: true),
+                                  (Route<dynamic> route) => false);
+                            },
+                            child: Center(
+                              child: Text(
+                                operation == "Edit" ? "Update" : "Save",
+                                textScaleFactor: textScaleFactor,
+                                style: const TextStyle(
+                                    color: Color(0xFFFFFFFF),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ));
+            );
+          });
+
+  Future editOrDelete(double textScaleFactor, double deviceWidth, dynamic task,
+          int index) =>
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(24.0))),
+                title: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 18.0 / mockupWidth * deviceWidth),
+                  child: Text(
+                    "Edit/Delete",
+                    textScaleFactor: textScaleFactor,
+                    style: const TextStyle(
+                        color: Color(0xFF333333),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16),
+                  ),
+                ),
+                content: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 16.0 / mockupWidth * deviceWidth),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const HomeScreen(),
+                                        maintainState: true),
+                                    (Route<dynamic> route) => false);
+                                taskAddorEdit(
+                                    textScaleFactor,
+                                    deviceWidth,
+                                    "Edit",
+                                    task["id"],
+                                    task["name"],
+                                    task["description"],
+                                    task["date"]);
+                              },
+                              child: Icon(Icons.edit_note_sharp,
+                                  color: Colors.blue,
+                                  size: 40 / mockupWidth * deviceWidth),
+                            ),
+                            Text(
+                              "Edit",
+                              textScaleFactor: textScaleFactor,
+                              style: const TextStyle(
+                                  color: Color(0xFF303030),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                rs
+                                    .deleteTask(task["id"].toString())
+                                    .whenComplete(() {
+                                  setState(() {
+                                    items.removeAt(index);
+                                  });
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Row(
+                                      children: const [
+                                        Icon(
+                                          Icons.playlist_add_check,
+                                          color: Colors.greenAccent,
+                                        ),
+                                        SizedBox(width: 20),
+                                        Expanded(
+                                            child: Text(
+                                                "Task Deleted Successfully!")),
+                                      ],
+                                    ),
+                                  ));
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const HomeScreen(),
+                                          maintainState: true),
+                                      (Route<dynamic> route) => false);
+                                });
+                              },
+                              child: Icon(Icons.delete_forever,
+                                  color: Colors.red,
+                                  size: 40 / mockupWidth * deviceWidth),
+                            ),
+                            Text(
+                              "Delete",
+                              textScaleFactor: textScaleFactor,
+                              style: const TextStyle(
+                                  color: Color(0xFF303030),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ));
 }
